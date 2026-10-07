@@ -13,8 +13,10 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       duration: 1.35,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
+      syncTouch: false,
+      overscroll: false,
       wheelMultiplier: 0.9,
-      touchMultiplier: 1.1,
+      touchMultiplier: 1,
     });
 
     lenis.on("scroll", () => {
@@ -47,9 +49,24 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
     const onRefresh = () => lenis.resize();
     ScrollTrigger.addEventListener("refresh", onRefresh);
+
+    let viewportTimer = 0;
+    const onViewportChange = () => {
+      window.clearTimeout(viewportTimer);
+      viewportTimer = window.setTimeout(() => {
+        lenis.resize();
+        ScrollTrigger.refresh();
+      }, 120);
+    };
+    window.visualViewport?.addEventListener("resize", onViewportChange);
+    window.visualViewport?.addEventListener("scroll", onViewportChange);
+
     ScrollTrigger.refresh();
 
     return () => {
+      window.clearTimeout(viewportTimer);
+      window.visualViewport?.removeEventListener("resize", onViewportChange);
+      window.visualViewport?.removeEventListener("scroll", onViewportChange);
       ScrollTrigger.removeEventListener("refresh", onRefresh);
       gsap.ticker.remove(tick);
       lenis.destroy();

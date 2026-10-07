@@ -55,9 +55,14 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+html {
+  overscroll-behavior-y: none;
+}
+
 html.lenis,
 html.lenis body {
   height: auto;
+  overscroll-behavior-y: none;
 }
 
 .lenis.lenis-smooth {
@@ -76,6 +81,8 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-mono);
+  overscroll-behavior-y: none;
+  overflow-x: clip;
 }
 
 ::selection {

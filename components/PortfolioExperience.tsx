@@ -19,6 +19,7 @@ import {
   storyBeats,
   storyPinHeadline,
 } from "@/lib/content";
+import { isCoarsePointer } from "@/lib/coarse-pointer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,6 +33,7 @@ export function PortfolioExperience() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      const coarse = isCoarsePointer();
       const refresh = () => ScrollTrigger.refresh();
 
       if (bgRef.current && storySectionRef.current) {
@@ -66,6 +68,7 @@ export function PortfolioExperience() {
           end: () => `+=${window.innerHeight * 0.72}`,
           pin: pinWrapRef.current,
           pinSpacing: false,
+          anticipatePin: coarse ? 1 : 0,
         });
 
         if (pinWrapRef.current) {
@@ -118,7 +121,7 @@ export function PortfolioExperience() {
               trigger: slot,
               start: "top 78%",
               end: "bottom 22%",
-              scrub: 1.2,
+              scrub: coarse ? 1.45 : 1.2,
               invalidateOnRefresh: true,
             },
           });

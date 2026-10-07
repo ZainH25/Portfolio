@@ -6,6 +6,7 @@ import {
   collectVisibleTextZones,
   refreshParticleTextZoneNodes,
 } from "@/lib/particle-text-zones";
+import { isCoarsePointer } from "@/lib/coarse-pointer";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -55,17 +56,23 @@ export function GlobalParticleField({ className }: Props) {
       },
     });
 
+    const coarse = isCoarsePointer();
     let scrollTick = 0;
     const onScroll = () => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      if (scrollY < 8) return;
+
       scrollTick += 1;
-      if (scrollTick % 4 !== 0) return;
+      const stride = coarse ? 14 : 4;
+      if (scrollTick % stride !== 0) return;
+
       refreshParticleTextZoneNodes();
       const scatter = document.querySelector<HTMLElement>("[data-aether-scatter]");
       if (!scatter) return;
       const r = scatter.getBoundingClientRect();
       const vh = window.innerHeight;
       if (r.top < vh * 0.92 && r.bottom > vh * 0.08) {
-        redistributeRef.current?.(0.22);
+        redistributeRef.current?.(coarse ? 0.08 : 0.22);
       }
     };
 

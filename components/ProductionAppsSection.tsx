@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ProjectCard } from "@/components/ProjectCard";
 import { enterpriseProjects, type Project } from "@/lib/content";
 import { AetherFlowBackdrop } from "@/components/ui/aether-flow-backdrop";
+import { isCoarsePointer } from "@/lib/coarse-pointer";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -32,7 +33,8 @@ export function ProductionAppsSection() {
     const count = slides.length;
     if (count === 0) return;
 
-    const slideSpan = () => window.innerHeight * 1.22;
+    const coarse = isCoarsePointer();
+    const slideSpan = () => window.innerHeight * (coarse ? 1.05 : 1.22);
 
     slides.forEach((slide, i) => {
       gsap.set(slide, {
@@ -53,10 +55,11 @@ export function ProductionAppsSection() {
         end: () =>
           `+=${Math.max(1, count - 1) * slideSpan() + slideSpan() * 0.4}`,
         pin: true,
-        scrub: 0.65,
+        scrub: coarse ? 0.9 : 0.65,
         invalidateOnRefresh: true,
+        anticipatePin: coarse ? 1 : 0,
         snap:
-          count > 1
+          count > 1 && !coarse
             ? {
                 snapTo: 1 / (count - 1),
                 duration: { min: 0.15, max: 0.5 },
@@ -68,9 +71,11 @@ export function ProductionAppsSection() {
           if (progressRef.current) {
             progressRef.current.style.transform = `scaleX(${self.progress})`;
           }
+          const steps = Math.max(1, count - 1);
+          const scaled = self.progress * steps;
           const idx = Math.min(
             count - 1,
-            Math.max(0, Math.round(self.progress * (count - 1))),
+            Math.max(0, coarse ? Math.floor(scaled + 0.38) : Math.round(scaled)),
           );
           if (idx !== activeIndexRef.current) {
             activeIndexRef.current = idx;
