@@ -32,8 +32,9 @@ export function GlobalParticleField({ className }: Props) {
     const onResize = () => refreshParticleTextZoneNodes();
     window.addEventListener("resize", onResize, { passive: true });
 
+    const coarseDevice = isCoarsePointer();
     const destroyParticles = attachParticleField(canvas, {
-      maxParticles: 170,
+      maxParticles: coarseDevice ? 110 : 170,
       densityDivisor: 5000,
       mouseRadius: 200,
       paintBackground: false,

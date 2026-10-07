@@ -7,6 +7,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { enterpriseProjects, type Project } from "@/lib/content";
 import { AetherFlowBackdrop } from "@/components/ui/aether-flow-backdrop";
 import { isCoarsePointer } from "@/lib/coarse-pointer";
+import { enterpriseScrollMotion } from "@/lib/mobile-motion";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,11 +22,14 @@ export function ProductionAppsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
+  const mobileCarouselRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const activeIndexRef = useRef(0);
 
   useEffect(() => {
     if (isCoarsePointer()) return;
+
+    const motion = enterpriseScrollMotion(false);
 
     const section = sectionRef.current;
     const stage = stageRef.current;
@@ -35,14 +39,14 @@ export function ProductionAppsSection() {
     const count = slides.length;
     if (count === 0) return;
 
-    const slideSpan = () => window.innerHeight * 1.22;
+    const slideSpan = () => window.innerHeight * motion.slideSpan;
 
     slides.forEach((slide, i) => {
       gsap.set(slide, {
         autoAlpha: i === 0 ? 1 : 0,
-        y: i === 0 ? 0 : 36,
+        y: i === 0 ? 0 : motion.yIn,
         scale: i === 0 ? 1 : 0.97,
-        filter: i === 0 ? "blur(0px)" : "blur(10px)",
+        filter: i === 0 ? "blur(0px)" : motion.blur,
         zIndex: i + 1,
         pointerEvents: i === 0 ? "auto" : "none",
       });
@@ -54,12 +58,14 @@ export function ProductionAppsSection() {
         trigger: section,
         start: "top top",
         end: () =>
-          `+=${Math.max(1, count - 1) * slideSpan() + slideSpan() * 0.4}`,
+          `+=${Math.max(1, count - 1) * slideSpan() + slideSpan() * 0.35}`,
         pin: true,
-        scrub: 0.65,
+        pinSpacing: true,
+        anticipatePin: 1,
+        scrub: motion.scrub,
         invalidateOnRefresh: true,
         snap:
-          count > 1
+          motion.snap && count > 1
             ? {
                 snapTo: 1 / (count - 1),
                 duration: { min: 0.15, max: 0.5 },
@@ -92,15 +98,20 @@ export function ProductionAppsSection() {
         slides[i],
         {
           autoAlpha: 0,
-          y: -28,
+          y: motion.yOut,
           scale: 0.98,
-          filter: "blur(12px)",
+          filter: motion.blur,
           duration: 0.45,
         },
         i,
       ).fromTo(
         slides[i + 1],
-        { autoAlpha: 0, y: 40, scale: 0.97, filter: "blur(12px)" },
+        {
+          autoAlpha: 0,
+          y: motion.yIn,
+          scale: 0.97,
+          filter: motion.blur,
+        },
         { autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.55 },
         i + 0.12,
       );
@@ -122,6 +133,39 @@ export function ProductionAppsSection() {
     };
   }, []);
 
+  useEffect(() => {
+    const carousel = mobileCarouselRef.current;
+    if (!carousel || !isCoarsePointer()) return;
+
+    const syncFromScroll = () => {
+      const children = Array.from(carousel.children) as HTMLElement[];
+      if (!children.length) return;
+      const center = carousel.scrollLeft + carousel.clientWidth / 2;
+      let best = 0;
+      let bestDist = Infinity;
+      children.forEach((child, i) => {
+        const childCenter = child.offsetLeft + child.offsetWidth / 2;
+        const dist = Math.abs(center - childCenter);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = i;
+        }
+      });
+      if (best !== activeIndexRef.current) {
+        activeIndexRef.current = best;
+        setActiveIndex(best);
+      }
+      const steps = Math.max(1, enterpriseProjects.length - 1);
+      if (progressRef.current) {
+        progressRef.current.style.transform = `scaleX(${best / steps})`;
+      }
+    };
+
+    carousel.addEventListener("scroll", syncFromScroll, { passive: true });
+    syncFromScroll();
+    return () => carousel.removeEventListener("scroll", syncFromScroll);
+  }, []);
+
   const selectSlide = (index: number) => {
     activeIndexRef.current = index;
     setActiveIndex(index);
@@ -129,7 +173,14 @@ export function ProductionAppsSection() {
 
   const scrollToSlide = (index: number) => {
     if (isCoarsePointer()) {
+      const carousel = mobileCarouselRef.current;
+      const child = carousel?.children[index] as HTMLElement | undefined;
+      child?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
       selectSlide(index);
+      const steps = Math.max(1, enterpriseProjects.length - 1);
+      if (progressRef.current) {
+        progressRef.current.style.transform = `scaleX(${index / steps})`;
+      }
       return;
     }
 
@@ -148,24 +199,22 @@ export function ProductionAppsSection() {
     window.scrollTo({ top: y, behavior: "smooth" });
   };
 
-  const activeProject = enterpriseProjects[activeIndex] ?? enterpriseProjects[0];
-
   return (
     <section
       id="projects-production"
       ref={sectionRef}
       data-aether-scatter
-      className="relative z-[1] overflow-hidden border-y border-border/50"
+      className="relative z-[1] overflow-x-clip border-y border-border/50 max-lg:overflow-y-visible lg:min-h-[100dvh] lg:overflow-hidden"
     >
       <AetherFlowBackdrop />
 
       <div
-        className="relative z-[1] flex min-h-0 items-center justify-center px-5 py-12 sm:px-8 md:px-10 lg:min-h-[100dvh] lg:py-10 lg:px-12 xl:px-16"
+        className="relative z-[1] flex min-h-0 items-start justify-center px-4 py-10 sm:px-8 sm:py-12 md:items-center md:px-10 lg:min-h-[100dvh] lg:py-10 lg:px-12 xl:px-16"
       >
         <div
-          className="flex w-full max-w-[70rem] flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-center lg:gap-12 xl:max-w-[74rem] xl:gap-16"
+          className="flex w-full max-w-[70rem] flex-col items-stretch gap-8 lg:flex-row lg:items-center lg:justify-center lg:gap-12 xl:max-w-[74rem] xl:gap-16"
         >
-          <header className="flex w-full max-w-[22rem] shrink-0 flex-col justify-center lg:max-w-[20rem] xl:max-w-[22rem]">
+          <header className="flex w-full shrink-0 flex-col justify-center lg:max-w-[20rem] xl:max-w-[22rem]">
             <div
               data-aether-clear
               className="relative isolate rounded-3xl px-1 py-4 lg:px-2 lg:py-2"
@@ -178,7 +227,7 @@ export function ProductionAppsSection() {
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-muted">
                 <span className="lg:hidden">
-                  Tap a tab to switch apps — scroll the page normally to continue.
+                  Swipe the cards for full details, or tap a tab to jump.
                 </span>
                 <span className="hidden lg:inline">
                   Three production Flutter apps — scroll or pick a tab to explore each one.
@@ -187,7 +236,7 @@ export function ProductionAppsSection() {
             </div>
 
             <div
-              className="mt-8 hidden h-0.5 w-full overflow-hidden rounded-full bg-border/60 lg:block"
+              className="mt-6 h-0.5 w-full overflow-hidden rounded-full bg-border/60 lg:mt-8"
               aria-hidden
             >
               <div
@@ -245,9 +294,16 @@ export function ProductionAppsSection() {
               })}
             </nav>
 
+          </header>
+
+          <div
+            ref={stageRef}
+            data-aether-ignore
+            className="relative flex w-full max-w-[34rem] shrink-0 flex-col gap-4 lg:items-center lg:justify-center"
+          >
             <nav
               data-aether-ignore
-              className="mt-5 flex flex-col gap-2 lg:hidden"
+              className="scrollbar-hide -mx-1 flex gap-2 overflow-x-auto px-1 lg:hidden"
               aria-label="Production app slides mobile"
             >
               {enterpriseProjects.map((project, index) => {
@@ -258,47 +314,36 @@ export function ProductionAppsSection() {
                     type="button"
                     onClick={() => scrollToSlide(index)}
                     className={cn(
-                      "group flex w-full items-center gap-3 rounded-[var(--radius-card)] border px-3.5 py-3 text-left transition-all duration-300",
+                      "shrink-0 rounded-full border px-4 py-2 text-xs font-semibold transition-colors",
                       isActive
-                        ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
-                        : "border-border bg-background/50",
+                        ? "border-primary bg-primary text-background shadow-md shadow-primary/20"
+                        : "border-border/70 bg-background/60 text-foreground/80",
                     )}
                     aria-current={isActive ? "true" : undefined}
                   >
-                    <span
-                      className={cn(
-                        "flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-control)] font-mono text-xs font-semibold tabular-nums",
-                        isActive ? "bg-primary text-background" : "bg-surface text-muted",
-                      )}
-                    >
-                      {project.index}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-semibold text-foreground">
-                        {tabLabel(project)}
-                      </span>
-                      <span className="mt-0.5 block truncate text-xs text-muted">
-                        {project.subtitle}
-                      </span>
-                    </span>
+                    {tabLabel(project)}
                   </button>
                 );
               })}
             </nav>
-          </header>
 
-          <div
-            ref={stageRef}
-            data-aether-ignore
-            className="relative flex w-full max-w-[34rem] shrink-0 items-center justify-center"
-          >
-            <div className="w-full lg:hidden">
-              <ProjectCard
-                key={activeProject.id}
-                project={activeProject}
-                variant="rail"
-                active
-              />
+            <div
+              ref={mobileCarouselRef}
+              className="scrollbar-hide -mx-4 flex w-[calc(100%+2rem)] snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 lg:hidden"
+              aria-label="Enterprise app details"
+            >
+              {enterpriseProjects.map((project, index) => (
+                <div
+                  key={project.id}
+                  className="w-[min(92vw,22rem)] shrink-0 snap-center"
+                >
+                  <ProjectCard
+                    project={project}
+                    variant="rail"
+                    active={index === activeIndex}
+                  />
+                </div>
+              ))}
             </div>
             <div className="relative hidden h-[min(72dvh,42rem)] w-full lg:block">
               {enterpriseProjects.map((project, index) => (

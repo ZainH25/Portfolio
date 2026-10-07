@@ -1,10 +1,17 @@
+import Image from "next/image";
 import { ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type MediaPlaceholderProps = {
   label?: string;
+  src?: string;
+  alt?: string;
   aspect?: "square" | "video" | "portrait";
+  /** App icons / screenshots — `contain` keeps full artwork visible */
+  fit?: "cover" | "contain";
   className?: string;
+  sizes?: string;
+  priority?: boolean;
 };
 
 const aspectClass = {
@@ -13,12 +20,39 @@ const aspectClass = {
   portrait: "aspect-[3/4]",
 };
 
-/** Drop-in slot — replace inner content with <Image /> when assets are ready. */
 export function MediaPlaceholder({
   label = "Add photo",
+  src,
+  alt,
   aspect = "video",
+  fit = "cover",
   className,
+  sizes = "(max-width: 768px) 90vw, 400px",
+  priority = false,
 }: MediaPlaceholderProps) {
+  if (src) {
+    return (
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-[var(--radius-card)] border border-border/60 bg-surface/40",
+          aspectClass[aspect],
+          className,
+        )}
+      >
+        <Image
+          src={src}
+          alt={alt ?? label}
+          fill
+          priority={priority}
+          sizes={sizes}
+          className={cn(
+            fit === "contain" ? "object-contain p-2" : "object-cover",
+          )}
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       className={cn(

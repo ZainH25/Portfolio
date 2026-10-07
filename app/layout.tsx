@@ -24,7 +24,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Zain Habib — Mobile Application Developer at Mobil80",
   description:
-    "Zain Habib builds production-grade Flutter apps for iOS and Android — offline-first field operations, AWS Amplify, GraphQL, and Firebase.",
+    "Zain Habib develops and implements Flutter apps for iOS and Android — offline-first field operations, AWS Amplify, GraphQL, and Firebase.",
   icons: {
     icon: [{ url: "/icon", type: "image/png" }],
     apple: [{ url: "/apple-icon", type: "image/png" }],
@@ -40,8 +40,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn("dark", dotGothic.variable, jetbrains.variable, geist.variable)}
+      suppressHydrationWarning
     >
-      <body className="antialiased bg-background">
+      <body className="antialiased bg-background" suppressHydrationWarning>
         <SmoothScroll>
           <div className="relative min-h-screen">
             <GlobalParticleField />

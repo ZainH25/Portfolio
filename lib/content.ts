@@ -3,17 +3,20 @@ export const site = {
   role: "Mobile Application Developer",
   employer: "Mobil80",
   subtitle: "Cross-Platform Mobile · iOS & Android",
-  headline: "Software Developer building scalable, secure mobile products end-to-end",
+  headline:
+    "Software developer designing, building, and implementing scalable mobile products end-to-end",
   tagline:
-    "Responsive Flutter interfaces backed by AWS services, GraphQL, and offline-first storage — clean architecture, fast performance, and features people rely on every day.",
+    "I develop responsive Flutter experiences backed by AWS, GraphQL, and offline-first storage — clean architecture, reliable performance, and features teams can depend on.",
   intro:
-    "I build production-grade mobile products with Flutter, Dart, GetX, AWS Amplify, AppSync, Firebase, GraphQL, and Hive.",
+    "I develop and implement mobile products with Flutter, Dart, GetX, AWS Amplify, AppSync, Firebase, GraphQL, and Hive.",
   location: "Bengaluru, Karnataka, India",
   email: "yupzainhere@gmail.com",
   phone: "+91 9503150965",
   linkedin: "https://www.linkedin.com/in/zainhabib25",
   github: "https://github.com/ZainH25",
   instagram: "https://www.instagram.com/zain.h____/",
+  /** Headshot: `public/images/portrait/myphoto.jpg` */
+  portraitUrl: "/images/portrait/myphoto.jpg",
   /** Place your PDF at `public/resume.pdf` or change this URL */
   resumeUrl: "https://docs.google.com/presentation/d/1Tj1DiEW3PYvmfuw0csbPciOT5UE5i01RFT2PVghlL6w/edit?usp=sharing",
 };
@@ -35,15 +38,16 @@ export const navLinks: NavLink[] = [
 
 export const atGlance = {
   title: "Quick snapshot",
-  subtitle: "School and engineering, internships, and what I build today at Mobil80.",
+  subtitle:
+    "Education, internships, and the apps I develop and implement today at Mobil80.",
   stats: [
     { value: "8+", label: "Months full-time" },
-    { value: "8+", label: "Live & featured projects" },
+    { value: "8+", label: "Apps built & featured" },
     { value: "25+", label: "Tools & tech" },
   ],
   currentRole:
-    "Shipping ServiceWRK and PharmaWRK — Flutter apps with AWS, offline sync, and field workflows for iOS and Android.",
-  focus: "Cross-platform mobile · AWS-backed APIs",
+    "Developing and implementing ServiceWRK and PharmaWRK — Flutter apps with AWS, offline sync, and field workflows for iOS and Android.",
+  focus: "Cross-platform development · AWS-backed APIs",
 };
 
 export const careerMilestones = [
@@ -84,17 +88,17 @@ export const focusAreas = [
   {
     title: "Offline-First Architecture",
     body:
-      "Caching and data sync using Hive so field teams keep working without dropped network connections.",
+      "I implement caching and background sync with Hive so field teams keep working when the network drops.",
   },
   {
     title: "AWS & Infrastructure",
     body:
-      "Authentication with AWS Cognito, GraphQL APIs via AppSync, and secure media storage on S3.",
+      "I integrate AWS Cognito auth, AppSync GraphQL APIs, and secure S3 storage for production backends.",
   },
   {
     title: "Native Device Capabilities",
     body:
-      "Real-time GPS tracking, OpenStreetMap polyline rendering, barcode scanning, and Firebase Cloud Messaging.",
+      "I build real-time GPS tracking, map polylines, barcode scanning, and push notifications with FCM.",
   },
 ];
 
@@ -103,34 +107,36 @@ export const storyBeats = [
     id: "school",
     label: "Chapter 01",
     headline: "Education foundations",
-    body: "Secondary school through pre-university (PCMC), then B.E. Computer Science.",
+    body:
+      "Built strong foundations from secondary school through pre-university (PCMC) into B.E. Computer Science.",
   },
   {
     id: "ml",
     label: "Chapter 02",
     headline: "NASSCOM AI/ML certification",
     body:
-      "480-hour Rooman Technologies internship — supervised & unsupervised ML with scikit-learn, Pandas, and NumPy (NSQF Level 5, Grade A).",
+      "480-hour Rooman Technologies internship — built supervised and unsupervised ML pipelines with scikit-learn, Pandas, and NumPy (NSQF Level 5, Grade A).",
   },
   {
     id: "qa",
     label: "Chapter 03",
     headline: "Quality & operations lens",
-    body: "InCruiter internship — SLAs, KPIs, RCA, and Power BI reporting for service delivery.",
+    body:
+      "InCruiter internship — analyzed SLAs, KPIs, and RCA, and built Power BI reporting for operational quality.",
   },
   {
     id: "mobile",
     label: "Chapter 04",
-    headline: "Mobil80 — production mobile",
+    headline: "Mobil80 — building production mobile",
     body:
-      "Shipping ServiceWRK and PharmaWRK for field technicians, agents, and pharma sales on iOS & Android.",
+      "Developing and implementing ServiceWRK and PharmaWRK for field technicians, agents, and pharma sales on iOS and Android.",
   },
   {
     id: "builder",
     label: "Chapter 05",
     headline: "Independent experiments",
     body:
-      "Fetch, live GPS, semantic book recommendations, mock interviews, crop ML, and ScheduleBOT — always building.",
+      "Fetch, live GPS, semantic book recommendations, mock interviews, crop ML, and ScheduleBOT — side projects where I experiment, build, and implement new ideas.",
   },
 ];
 
@@ -155,12 +161,12 @@ export const projects: Project[] = [
     stack:
       "Flutter | Dart | GetX | AWS Amplify | AWS Cognito | AWS S3 | FCM | Hive | Google Maps | Geolocator | Barcode Scanner",
     summary:
-      "A ticket-management platform for field technicians with live tracking and fleet management.",
+      "Enterprise ticket management for field technicians with live tracking and fleet visibility.",
     highlights: [
-      "Complete ticket workflow (create, assign, WIP, close, history) with phone-OTP and role-based access via AWS Cognito.",
-      "Real-time GPS technician tracking using Google Maps and Geolocator.",
-      "Barcode scanning with S3 media uploads (images, audio, video, PDFs) for product fleet tracking.",
-      "Material Request Form (MRF), Sales Form, and Attendance modules with offline caching via Hive and FCM notifications.",
+      "Implemented end-to-end ticket workflows (create, assign, WIP, close, history) with phone OTP and role-based access via AWS Cognito.",
+      "Built real-time GPS technician tracking with Google Maps and Geolocator.",
+      "Developed barcode capture with S3 media uploads (images, audio, video, PDFs) for fleet and asset tracking.",
+      "Implemented MRF, Sales Form, and Attendance modules with offline caching in Hive and FCM notifications.",
     ],
   },
   {
@@ -170,12 +176,13 @@ export const projects: Project[] = [
     category: "enterprise",
     index: "02",
     stack: "Flutter | Dart | AWS AppSync (GraphQL) | FCM | Hive | Speech-to-Text",
-    summary: "An offline-first field sales app for medical representatives.",
+    summary:
+      "Offline-first field sales platform for medical representatives and their managers.",
     highlights: [
-      "Offline-first architecture using Hive to log doctor, hospital, pharmacist, and stockist visits without connectivity, with background sync.",
-      "Point-of-Visit (POV) logging, e-detailing, tour planning, and expense management across rep → manager → admin hierarchy.",
-      "Speech-to-text for fast visit notes and POV capture when reps are on the move.",
-      "Tour planning, daily call reporting, and expense workflows aligned to rep → manager → admin roles.",
+      "Architected offline-first visit logging with Hive for doctors, hospitals, pharmacists, and stockists, with background sync when online.",
+      "Implemented POV logging, e-detailing, tour planning, and expense flows across rep → manager → admin roles.",
+      "Integrated speech-to-text for fast visit notes and POV capture on the move.",
+      "Built tour planning, daily call reporting, and expense workflows aligned to the field hierarchy.",
     ],
   },
   {
@@ -185,12 +192,13 @@ export const projects: Project[] = [
     category: "enterprise",
     index: "03",
     stack: "Flutter | Dart | GetX | AWS Amplify | AWS Cognito | Firebase | GraphQL | REST",
-    summary: "A mobile app for agent workflows, ticket routing, and partner operations.",
+    summary:
+      "Mobile operations hub for agents — ticket routing, partner workflows, and secure onboarding.",
     highlights: [
-      "Dynamic validation and role-based access control integrated with cloud backends.",
-      "Ticket routing and assignment between partners, agents, and operations teams.",
-      "Partner onboarding with configurable forms, validation rules, and secure document flows.",
-      "Push updates via Firebase and FCM so agents see status changes without polling.",
+      "Implemented dynamic validation and role-based access control against cloud backends.",
+      "Built ticket routing and assignment between partners, agents, and operations teams.",
+      "Developed partner onboarding with configurable forms, validation rules, and secure document flows.",
+      "Integrated Firebase and FCM push updates so agents see status changes without polling.",
     ],
   },
   {
@@ -201,10 +209,10 @@ export const projects: Project[] = [
     index: "04",
     stack: "Flutter | Dart | On-Device Whisper | AWS Amplify | AWS AppSync | AWS S3",
     summary:
-      "A voice utility that searches and fetches cross-device files using on-device speech recognition.",
+      "Voice-driven utility to search and retrieve files across devices using on-device speech recognition.",
     highlights: [
-      "Hands-free query parsing using an on-device Whisper model.",
-      "Cross-device file transfer powered by AWS Amplify, GraphQL, and AWS S3 storage.",
+      "Implemented hands-free query parsing with an on-device Whisper model.",
+      "Built cross-device file transfer on AWS Amplify, GraphQL, and S3 storage.",
     ],
   },
   {
@@ -216,11 +224,11 @@ export const projects: Project[] = [
     stack:
       "Flutter | GetX | Firebase Firestore | FCM | OpenStreetMap | Geolocator | Foreground Service",
     summary:
-      "A tracking app built to run continuously across foreground, background, and screen-locked states.",
+      "Location tracking app engineered to run across foreground, background, and locked-screen states.",
     highlights: [
-      "Persistent foreground tracking with OpenStreetMap polyline path drawing and distance metrics.",
-      "Remote reactivation via FCM data-only triggers to resume tracking even after force-kill.",
-      "Offline persistence with Firebase Firestore and anonymous session handling.",
+      "Implemented persistent foreground tracking with OpenStreetMap polylines and distance metrics.",
+      "Developed remote reactivation via FCM data-only triggers to resume tracking after force-kill.",
+      "Built offline persistence with Firebase Firestore and anonymous session handling.",
     ],
   },
   {
@@ -231,10 +239,10 @@ export const projects: Project[] = [
     index: "06",
     stack: "Python | Flask | ChromaDB | HuggingFace Transformers | Gradio",
     summary:
-      "An AI recommender hosted on HuggingFace Spaces using embeddings and sentiment analysis.",
+      "AI book recommender on HuggingFace Spaces using embeddings and sentiment analysis.",
     highlights: [
-      "Vector similarity search using ChromaDB and FastEmbed (BAAI/bge-small-en-v1.5).",
-      "Emotion intensity scoring (DistilRoBERTa) and zero-shot category classification (BART-large-MNLI).",
+      "Implemented vector similarity search with ChromaDB and FastEmbed (BAAI/bge-small-en-v1.5).",
+      "Built emotion scoring (DistilRoBERTa) and zero-shot category classification (BART-large-MNLI).",
     ],
   },
   {
@@ -245,10 +253,10 @@ export const projects: Project[] = [
     index: "07",
     stack: "Python | Flask | MySQL | Sentence Transformers (SBERT) | Bootstrap",
     summary:
-      "A web app that generates domain-specific technical questions and evaluates answer semantics.",
+      "Web platform that generates domain-specific technical questions and scores answer semantics.",
     highlights: [
-      "Fine-tuned Sentence-BERT (SBERT) model for answer semantic scoring.",
-      "Automated resume generation, timed mock tests, and MySQL performance history tracking.",
+      "Developed semantic answer scoring with a fine-tuned Sentence-BERT (SBERT) model.",
+      "Implemented resume generation, timed mock tests, and MySQL performance history tracking.",
     ],
   },
   {
@@ -259,9 +267,9 @@ export const projects: Project[] = [
     index: "08",
     stack: "Python | Jupyter Notebook | scikit-learn | Flask | HTML",
     summary:
-      "A classification tool predicting optimal crop choices based on soil composition and weather metrics.",
+      "ML classification tool that recommends crops from soil composition and weather inputs.",
     highlights: [
-      "Preprocessed pipeline using scikit-learn, MinMaxScaler, and StandardScaler deployed with Flask.",
+      "Built preprocessing and inference pipelines with scikit-learn, MinMaxScaler, and StandardScaler, served via Flask.",
     ],
   },
   {
@@ -272,8 +280,10 @@ export const projects: Project[] = [
     index: "09",
     stack: "Java | Telegram Bot API | Maven",
     summary:
-      "A Telegram bot that automates student access to study notes, timetables, and resource centers.",
-    highlights: ["Automated delivery of academic materials and resource links."],
+      "Telegram bot that gives students on-demand access to notes, timetables, and resource links.",
+    highlights: [
+      "Implemented automated distribution of academic materials and resource links via the Telegram Bot API.",
+    ],
   },
 ];
 
@@ -290,10 +300,10 @@ export const experience = [
     techStack:
       "Flutter | Dart | GetX | AWS Amplify | AWS Cognito | AWS AppSync | AWS S3 | GraphQL | REST | Hive | Firebase | FCM",
     highlights: [
-      "Develop and maintain production Flutter applications across field-service management, partner management, and pharma field-sales domains.",
-      "Integrate AWS Amplify GraphQL APIs (AWS AppSync), AWS Cognito authentication, and AWS S3 for secure backend connectivity.",
-      "Implement offline-first architecture using Hive, Google Maps geolocation, real-time barcode scanning, and Firebase Cloud Messaging.",
-      "Own performance optimization, state management with GetX, and scalability across the full development lifecycle from design to release.",
+      "Develop and maintain Flutter applications for field-service management, partner operations, and pharma field sales.",
+      "Implement AWS AppSync GraphQL APIs, Cognito authentication, and S3 storage for secure backend connectivity.",
+      "Build offline-first data layers with Hive, Google Maps geolocation, barcode scanning, and Firebase Cloud Messaging.",
+      "Lead performance tuning, GetX state management, and scalable architecture from design through implementation and release.",
     ],
   },
   {
@@ -422,13 +432,13 @@ export const certifications = [
 export const storyPinHeadline = {
   line1: "How I got here",
   accent: "chapter by chapter",
-  line2: "From learning and internships to shipping production mobile apps.",
+  line2: "From learning and internships to building and implementing production mobile apps.",
 };
 
 export const contactSection = {
   eyebrow: "Contact",
   title: "Reach out directly",
   body:
-    "Recruiters, founders, and teams — email is fastest. I usually reply within a couple of days.",
-  note: "Based in Bengaluru · open to remote-friendly roles and contract work",
+    "Recruiters, founders, and engineering teams — email is the fastest way to reach me. I typically reply within a couple of days.",
+  note: "Based in Bengaluru · open to remote-friendly roles and contract development work",
 };

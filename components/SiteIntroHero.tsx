@@ -7,9 +7,10 @@ export function SiteIntroHero() {
   return (
     <AetherFlowHero
       id="hero"
-      badge={`${site.role} at ${site.employer}`}
+      badge={`${site.role} · ${site.employer}`}
       subtitle={site.subtitle}
       title={site.name}
+      descriptionMobile={site.tagline}
       description={`${site.intro} ${site.headline}.`}
       primaryCta={{ label: "About me", href: "#about" }}
       secondaryCta={{ label: "View projects", href: "#projects" }}

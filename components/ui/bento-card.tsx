@@ -12,7 +12,11 @@ export function BentoCard({ children, className, glow, badge }: BentoCardProps) 
   return (
     <div
       data-aether-avoid
-      className={cn("bento-surface p-4 md:p-5", glow && "bento-glow", className)}
+      className={cn(
+        "bento-surface rounded-2xl p-3.5 sm:p-4 md:rounded-xl md:p-5",
+        glow && "bento-glow",
+        className,
+      )}
     >
       {badge ? <div className="relative z-[1] mb-4 flex justify-end">{badge}</div> : null}
       <div className="relative z-[1]">{children}</div>

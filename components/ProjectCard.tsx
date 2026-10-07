@@ -1,5 +1,6 @@
 import { MediaPlaceholder } from "@/components/MediaPlaceholder";
 import type { Project } from "@/lib/content";
+import { getProjectImageSrc } from "@/lib/project-images";
 import { cn } from "@/lib/utils";
 
 type ProjectCardProps = {
@@ -10,6 +11,7 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project, variant = "grid", active = false }: ProjectCardProps) {
   const isRail = variant === "rail";
+  const imageSrc = getProjectImageSrc(project.id);
 
   return (
     <article
@@ -17,7 +19,7 @@ export function ProjectCard({ project, variant = "grid", active = false }: Proje
       className={
         isRail
           ? cn(
-              "group flex h-full max-h-[min(72dvh,42rem)] w-full max-w-[34rem] flex-col overflow-hidden rounded-[var(--radius-card)] border p-5 backdrop-blur-md transition-[border-color,box-shadow] duration-500 md:p-6",
+              "group flex w-full max-w-[34rem] flex-col rounded-[var(--radius-card)] border p-4 backdrop-blur-md transition-[border-color,box-shadow] duration-500 max-lg:overflow-visible sm:p-5 lg:max-h-[min(72dvh,42rem)] lg:overflow-hidden lg:p-6",
               active
                 ? "border-primary/50 bg-background/95 shadow-2xl shadow-primary/15 ring-1 ring-primary/20"
                 : "border-border/80 bg-background/90",
@@ -28,20 +30,26 @@ export function ProjectCard({ project, variant = "grid", active = false }: Proje
       }
     >
       <MediaPlaceholder
+        src={imageSrc}
+        alt={`${project.title} app`}
         label={`${project.title} screenshot`}
         aspect="square"
+        fit={imageSrc ? "contain" : "cover"}
+        sizes={isRail ? "(max-width: 1024px) 100vw, 34rem" : "(max-width: 768px) 40vw, 9rem"}
         className={cn(
           "shrink-0 transition-opacity group-hover:opacity-90",
-          isRail && "!aspect-auto mb-3 h-[9.5rem] w-full shrink-0 md:h-[10.5rem]",
+          isRail &&
+            "!aspect-auto mb-3 h-[7.5rem] w-full shrink-0 bg-background/50 max-lg:h-[7.5rem] sm:h-[10.5rem] md:h-[10.5rem]",
           !isRail &&
-            "mx-auto mb-3 aspect-square w-[38%] min-w-[6.75rem] max-w-[9.25rem] rounded-lg",
+            "mx-auto mb-3 aspect-square w-[42%] min-w-[7rem] max-w-[10rem] rounded-lg",
         )}
       />
 
       <div
         className={cn(
           "flex min-h-0 flex-col",
-          isRail && "min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 [-webkit-overflow-scrolling:touch]",
+          isRail &&
+            "flex flex-col lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:overscroll-contain lg:pr-1 lg:[-webkit-overflow-scrolling:touch]",
         )}
       >
         <p className="shrink-0 text-xs font-semibold uppercase tracking-widest text-primary">

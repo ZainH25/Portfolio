@@ -13,6 +13,8 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     const coarse = isCoarsePointer();
 
     if (coarse) {
+      ScrollTrigger.normalizeScroll(true);
+
       const onScroll = () => {
         ScrollTrigger.update();
         window.dispatchEvent(new CustomEvent("portfolio-scroll"));
@@ -26,12 +28,19 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       };
       window.visualViewport?.addEventListener("resize", onViewportResize);
 
+      const onLoad = () => ScrollTrigger.refresh();
+      window.addEventListener("load", onLoad);
+      const t = window.setTimeout(() => ScrollTrigger.refresh(), 800);
+
       ScrollTrigger.refresh();
 
       return () => {
         window.clearTimeout(viewportTimer);
+        window.clearTimeout(t);
+        window.removeEventListener("load", onLoad);
         window.removeEventListener("scroll", onScroll);
         window.visualViewport?.removeEventListener("resize", onViewportResize);
+        ScrollTrigger.normalizeScroll(false);
       };
     }
 

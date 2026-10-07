@@ -7,6 +7,8 @@ import CommunityOrbit, {
   type OrbitStat,
   type OrbitTag,
 } from "@/components/ui/builders-community-hero";
+import { MobileProjectsHighlight } from "@/components/MobileProjectsHighlight";
+import { useCoarsePointer } from "@/hooks/useCoarsePointer";
 import {
   atGlance,
   enterpriseProjects,
@@ -38,7 +40,6 @@ function buildOrbitItems(ordered: Project[]): OrbitItem[] {
 
   ordered.forEach((project, i) => {
     const ring = i % 2 === 0 ? "outer" : "inner";
-    /** Keep labels on the visible upper arc (≈38°–142°) */
     const angle = 38 + (104 * i) / Math.max(1, n - 1);
     items.push({
       kind: "pill",
@@ -70,6 +71,7 @@ function buildOrbitItems(ordered: Project[]): OrbitItem[] {
 const toolCount = skillCategories.reduce((c, cat) => c + cat.items.length, 0);
 
 export function ProjectsOrbitShowcase() {
+  const coarse = useCoarsePointer();
   const items = useMemo(() => buildOrbitItems(orbitProjectOrder(projects)), []);
 
   const stats: OrbitStat[] = useMemo(
@@ -101,6 +103,10 @@ export function ProjectsOrbitShowcase() {
     ],
     [],
   );
+
+  if (coarse) {
+    return <MobileProjectsHighlight />;
+  }
 
   return (
     <CommunityOrbit
