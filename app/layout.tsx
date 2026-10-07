@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   title: "Zain Habib — Mobile Application Developer at Mobil80",
   description:
     "Zain Habib builds production-grade Flutter apps for iOS and Android — offline-first field operations, AWS Amplify, GraphQL, and Firebase.",
+  icons: {
+    icon: [{ url: "/icon", type: "image/png" }],
+    apple: [{ url: "/apple-icon", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({
