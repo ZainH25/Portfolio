@@ -25,6 +25,8 @@ export function ProductionAppsSection() {
   const activeIndexRef = useRef(0);
 
   useEffect(() => {
+    if (isCoarsePointer()) return;
+
     const section = sectionRef.current;
     const stage = stageRef.current;
     if (!section || !stage) return;
@@ -33,8 +35,7 @@ export function ProductionAppsSection() {
     const count = slides.length;
     if (count === 0) return;
 
-    const coarse = isCoarsePointer();
-    const slideSpan = () => window.innerHeight * (coarse ? 1.05 : 1.22);
+    const slideSpan = () => window.innerHeight * 1.22;
 
     slides.forEach((slide, i) => {
       gsap.set(slide, {
@@ -55,11 +56,10 @@ export function ProductionAppsSection() {
         end: () =>
           `+=${Math.max(1, count - 1) * slideSpan() + slideSpan() * 0.4}`,
         pin: true,
-        scrub: coarse ? 0.9 : 0.65,
+        scrub: 0.65,
         invalidateOnRefresh: true,
-        anticipatePin: coarse ? 1 : 0,
         snap:
-          count > 1 && !coarse
+          count > 1
             ? {
                 snapTo: 1 / (count - 1),
                 duration: { min: 0.15, max: 0.5 },
@@ -72,10 +72,9 @@ export function ProductionAppsSection() {
             progressRef.current.style.transform = `scaleX(${self.progress})`;
           }
           const steps = Math.max(1, count - 1);
-          const scaled = self.progress * steps;
           const idx = Math.min(
             count - 1,
-            Math.max(0, coarse ? Math.floor(scaled + 0.38) : Math.round(scaled)),
+            Math.max(0, Math.round(self.progress * steps)),
           );
           if (idx !== activeIndexRef.current) {
             activeIndexRef.current = idx;
@@ -123,18 +122,33 @@ export function ProductionAppsSection() {
     };
   }, []);
 
+  const selectSlide = (index: number) => {
+    activeIndexRef.current = index;
+    setActiveIndex(index);
+  };
+
   const scrollToSlide = (index: number) => {
+    if (isCoarsePointer()) {
+      selectSlide(index);
+      return;
+    }
+
     const section = sectionRef.current;
     if (!section) return;
 
     const st = ScrollTrigger.getAll().find((t) => t.trigger === section);
-    if (!st) return;
+    if (!st) {
+      selectSlide(index);
+      return;
+    }
 
     const count = enterpriseProjects.length;
     const progress = count <= 1 ? 0 : index / (count - 1);
     const y = st.start + progress * (st.end - st.start);
     window.scrollTo({ top: y, behavior: "smooth" });
   };
+
+  const activeProject = enterpriseProjects[activeIndex] ?? enterpriseProjects[0];
 
   return (
     <section
@@ -145,133 +159,163 @@ export function ProductionAppsSection() {
     >
       <AetherFlowBackdrop />
 
-      <div className="relative z-[1] flex min-h-[100dvh] items-center justify-center px-5 py-10 sm:px-8 md:px-10 lg:px-12 xl:px-16">
+      <div
+        className="relative z-[1] flex min-h-0 items-center justify-center px-5 py-12 sm:px-8 md:px-10 lg:min-h-[100dvh] lg:py-10 lg:px-12 xl:px-16"
+      >
         <div
           className="flex w-full max-w-[70rem] flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-center lg:gap-12 xl:max-w-[74rem] xl:gap-16"
         >
-        <header className="flex w-full max-w-[22rem] shrink-0 flex-col justify-center lg:max-w-[20rem] xl:max-w-[22rem]">
-          <div
-            data-aether-clear
-            className="relative isolate rounded-3xl px-1 py-4 lg:px-2 lg:py-2"
-          >
-            <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              Production apps
-            </p>
-            <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl text-foreground md:text-3xl">
-              Enterprise apps
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              Three production Flutter apps — scroll or pick a tab to explore each one.
-            </p>
-          </div>
-
-          <div
-            className="mt-8 hidden h-0.5 w-full overflow-hidden rounded-full bg-border/60 lg:block"
-            aria-hidden
-          >
+          <header className="flex w-full max-w-[22rem] shrink-0 flex-col justify-center lg:max-w-[20rem] xl:max-w-[22rem]">
             <div
-              ref={progressRef}
-              className="h-full w-full origin-left rounded-full bg-primary"
-              style={{ transform: "scaleX(0)" }}
-            />
-          </div>
+              data-aether-clear
+              className="relative isolate rounded-3xl px-1 py-4 lg:px-2 lg:py-2"
+            >
+              <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                Production apps
+              </p>
+              <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl text-foreground md:text-3xl">
+                Enterprise apps
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted">
+                <span className="lg:hidden">
+                  Tap a tab to switch apps — scroll the page normally to continue.
+                </span>
+                <span className="hidden lg:inline">
+                  Three production Flutter apps — scroll or pick a tab to explore each one.
+                </span>
+              </p>
+            </div>
 
-          <nav
-            data-aether-ignore
-            className="mt-6 flex flex-col gap-2"
-            aria-label="Production app slides"
-          >
-            {enterpriseProjects.map((project, index) => {
-              const isActive = index === activeIndex;
-              return (
-                <button
-                  key={project.id}
-                  type="button"
-                  onClick={() => scrollToSlide(index)}
-                  className={cn(
-                    "group flex w-full items-center gap-4 rounded-[var(--radius-card)] border px-4 py-3.5 text-left transition-[border-color,background-color,box-shadow,transform] duration-300 md:py-4",
-                    isActive
-                      ? "border-primary/60 bg-primary/10 shadow-md shadow-primary/10"
-                      : "border-border/60 bg-background/40 hover:border-primary/35 hover:bg-background/70",
-                  )}
-                  aria-current={isActive ? "true" : undefined}
-                >
-                  <span
+            <div
+              className="mt-8 hidden h-0.5 w-full overflow-hidden rounded-full bg-border/60 lg:block"
+              aria-hidden
+            >
+              <div
+                ref={progressRef}
+                className="h-full w-full origin-left rounded-full bg-primary"
+                style={{ transform: "scaleX(0)" }}
+              />
+            </div>
+
+            <nav
+              data-aether-ignore
+              className="mt-6 hidden flex-col gap-2 lg:flex"
+              aria-label="Production app slides"
+            >
+              {enterpriseProjects.map((project, index) => {
+                const isActive = index === activeIndex;
+                return (
+                  <button
+                    key={project.id}
+                    type="button"
+                    onClick={() => scrollToSlide(index)}
                     className={cn(
-                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-control)] font-mono text-sm font-semibold tabular-nums transition-colors",
+                      "group flex w-full items-center gap-4 rounded-[var(--radius-card)] border px-4 py-3.5 text-left transition-[border-color,background-color,box-shadow,transform] duration-300 md:py-4",
                       isActive
-                        ? "bg-primary text-background"
-                        : "bg-surface text-muted group-hover:text-foreground",
+                        ? "border-primary/60 bg-primary/10 shadow-md shadow-primary/10"
+                        : "border-border/60 bg-background/40 hover:border-primary/35 hover:bg-background/70",
                     )}
+                    aria-current={isActive ? "true" : undefined}
                   >
-                    {project.index}
-                  </span>
-                  <span className="min-w-0 flex-1">
                     <span
                       className={cn(
-                        "block text-sm font-semibold tracking-tight transition-colors",
-                        isActive ? "text-foreground" : "text-foreground/75",
+                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-control)] font-mono text-sm font-semibold tabular-nums transition-colors",
+                        isActive
+                          ? "bg-primary text-background"
+                          : "bg-surface text-muted group-hover:text-foreground",
                       )}
                     >
-                      {tabLabel(project)}
+                      {project.index}
                     </span>
-                    <span className="mt-0.5 block truncate text-xs text-muted">
-                      {project.subtitle}
+                    <span className="min-w-0 flex-1">
+                      <span
+                        className={cn(
+                          "block text-sm font-semibold tracking-tight transition-colors",
+                          isActive ? "text-foreground" : "text-foreground/75",
+                        )}
+                      >
+                        {tabLabel(project)}
+                      </span>
+                      <span className="mt-0.5 block truncate text-xs text-muted">
+                        {project.subtitle}
+                      </span>
                     </span>
-                  </span>
-                </button>
-              );
-            })}
-          </nav>
+                  </button>
+                );
+              })}
+            </nav>
 
-          <nav
+            <nav
+              data-aether-ignore
+              className="mt-5 flex flex-col gap-2 lg:hidden"
+              aria-label="Production app slides mobile"
+            >
+              {enterpriseProjects.map((project, index) => {
+                const isActive = index === activeIndex;
+                return (
+                  <button
+                    key={`m-${project.id}`}
+                    type="button"
+                    onClick={() => scrollToSlide(index)}
+                    className={cn(
+                      "group flex w-full items-center gap-3 rounded-[var(--radius-card)] border px-3.5 py-3 text-left transition-all duration-300",
+                      isActive
+                        ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
+                        : "border-border bg-background/50",
+                    )}
+                    aria-current={isActive ? "true" : undefined}
+                  >
+                    <span
+                      className={cn(
+                        "flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-control)] font-mono text-xs font-semibold tabular-nums",
+                        isActive ? "bg-primary text-background" : "bg-surface text-muted",
+                      )}
+                    >
+                      {project.index}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-semibold text-foreground">
+                        {tabLabel(project)}
+                      </span>
+                      <span className="mt-0.5 block truncate text-xs text-muted">
+                        {project.subtitle}
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </nav>
+          </header>
+
+          <div
+            ref={stageRef}
             data-aether-ignore
-            className="mt-5 flex flex-wrap justify-center gap-2 lg:hidden"
-            aria-label="Production app slides mobile"
+            className="relative flex w-full max-w-[34rem] shrink-0 items-center justify-center"
           >
-            {enterpriseProjects.map((project, index) => {
-              const isActive = index === activeIndex;
-              return (
-                <button
-                  key={`m-${project.id}`}
-                  type="button"
-                  onClick={() => scrollToSlide(index)}
-                  className={cn(
-                    "rounded-[var(--radius-pill)] border px-3.5 py-2 text-[11px] font-semibold uppercase tracking-widest transition-all duration-300",
-                    isActive
-                      ? "border-primary bg-primary text-background shadow-md shadow-primary/25"
-                      : "border-border bg-background/50 text-muted",
-                  )}
-                  aria-current={isActive ? "true" : undefined}
+            <div className="w-full lg:hidden">
+              <ProjectCard
+                key={activeProject.id}
+                project={activeProject}
+                variant="rail"
+                active
+              />
+            </div>
+            <div className="relative hidden h-[min(72dvh,42rem)] w-full lg:block">
+              {enterpriseProjects.map((project, index) => (
+                <div
+                  key={project.id}
+                  data-enterprise-slide
+                  className="absolute inset-0 flex items-center justify-center will-change-[transform,opacity,filter]"
                 >
-                  {project.index} · {tabLabel(project)}
-                </button>
-              );
-            })}
-          </nav>
-        </header>
-
-        <div
-          ref={stageRef}
-          data-aether-ignore
-          className="relative flex w-full max-w-[34rem] shrink-0 items-center justify-center"
-        >
-          <div className="relative h-[min(72dvh,42rem)] w-full">
-            {enterpriseProjects.map((project, index) => (
-              <div
-                key={project.id}
-                data-enterprise-slide
-                className="absolute inset-0 flex items-center justify-center will-change-[transform,opacity,filter]"
-              >
-                <ProjectCard
-                  project={project}
-                  variant="rail"
-                  active={index === activeIndex}
-                />
-              </div>
-            ))}
+                  <ProjectCard
+                    project={project}
+                    variant="rail"
+                    active={index === activeIndex}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </section>
