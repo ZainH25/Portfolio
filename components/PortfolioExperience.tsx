@@ -116,25 +116,26 @@ export function PortfolioExperience() {
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: slot,
-              start: "top 90%",
-              end: "bottom 10%",
-              scrub: 1.15,
+              start: "top 78%",
+              end: "bottom 22%",
+              scrub: 1.2,
               invalidateOnRefresh: true,
             },
           });
 
           tl.fromTo(
             beat,
-            { autoAlpha: 0, y: 40, scale: 0.98, filter: "blur(12px)", visibility: "hidden" },
+            { autoAlpha: 0, y: 52, scale: 0.97, filter: "blur(14px)", visibility: "hidden" },
             {
               autoAlpha: 1,
               y: 0,
               scale: 1,
               filter: "blur(0px)",
               visibility: "visible",
-              duration: 0.2,
+              duration: 0.22,
               ease: "none",
             },
+            0.28,
           )
             .to(beat, {
               autoAlpha: 1,
@@ -142,16 +143,16 @@ export function PortfolioExperience() {
               scale: 1,
               filter: "blur(0px)",
               visibility: "visible",
-              duration: 0.38,
+              duration: 0.34,
               ease: "none",
             })
             .to(beat, {
               autoAlpha: 0,
-              y: -48,
+              y: -56,
               scale: 0.96,
-              filter: "blur(18px)",
+              filter: "blur(20px)",
               visibility: "hidden",
-              duration: 0.42,
+              duration: 0.44,
               ease: "none",
             });
         });
@@ -398,7 +399,7 @@ export function PortfolioExperience() {
         id="story"
         ref={storySectionRef}
         className="relative border-t border-border/50"
-        style={{ minHeight: `${storyBeats.length * 92 + 36}vh` }}
+        style={{ minHeight: `${storyBeats.length * 100 + 32}vh` }}
         aria-label="Story"
       >
         <div
@@ -420,15 +421,15 @@ export function PortfolioExperience() {
         </div>
         <div
           ref={beatsRef}
-          className="relative isolate z-10 mx-auto max-w-2xl px-6 pb-8 pt-[10vh] text-center"
+          className="relative isolate z-10 mx-auto max-w-2xl px-6 pb-8 pt-4 text-center"
         >
           {storyBeats.map((beat, index) => (
             <div
               key={beat.id}
               data-story-beat-slot
-              className="relative flex min-h-[92vh] items-start justify-center"
+              className="relative flex min-h-[100dvh] items-center justify-center"
             >
-              <div className="sticky top-1/2 w-full -translate-y-1/2">
+              <div className="sticky top-[50vh] w-full -translate-y-1/2">
                 <article
                   data-story-beat
                   style={{ zIndex: index + 1 }}
